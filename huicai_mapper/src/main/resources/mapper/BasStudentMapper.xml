@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jhc.huicai.mapper.BasStudentMapper">
+    <select id="getStuPageData" resultType="com.jhc.huicai.VO.BasStudentVo">
+        SELECT
+        cs.id,
+        cs.`number`,
+        cs.`NAME`,
+        sex,
+        grade,
+        cs.college_number AS collegeNumber,
+        cs.major_number AS majorNumber,
+        bs.`name` as className,
+        bm.`name` As majorName,
+        bc.`name` AS collegeName,
+        phone
+        FROM
+        bas_student AS cs
+        left JOIN bas_major AS bm ON bm.number = cs.major_number
+        left JOIN bas_college AS bc ON cs.college_number = bc.number
+        left JOIN bas_class AS bs ON bs.number = cs.class_number
+        WHERE
+        cs.is_del = 0
+        <if test='dto.number != null and dto.number !="" '>
+            and cs.number = #{dto.number}
+        </if>
+        <if test='dto.name != null and dto.name !="" '>
+            and cs.NAME  like CONCAT('%',#{dto.name},'%')
+        </if>
+        <if test='dto.majorNumber != null and dto.majorNumber !="" '>
+            and cs.major_number = #{dto.majorNumber}
+        </if>
+        <if test='dto.collegeNumber != null and dto.collegeNumber !="" '>
+            and cs.college_number = #{dto.collegeNumber}
+        </if>
+        ORDER BY cs.create_time
+    </select>
+
+</mapper>

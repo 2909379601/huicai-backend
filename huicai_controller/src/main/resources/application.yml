@@ -1,0 +1,83 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: huicai_backend
+  datasource:
+    # 数据库连接驱动
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://10.2.51.164:3306/huicai_backend?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8&allowPublicKeyRetrieval=true
+    username: root
+    password: Jhc103Mysql
+    druid:
+      initial-size: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      #   配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall
+  redis:
+    host: 10.2.51.164
+    port: 5001
+    password: Jhc103SoFtWare
+    timeout: 6000ms
+  servlet:
+    multipart:
+      max-request-size:  30MB
+      max-file-size: 30MB
+  security:
+    user:
+      name: admin
+      password: 123456
+# MP配置日志
+logging:
+  level:
+    root: info
+    com.jhc.mapper: debug
+    com.jhc.service: debug
+    com.jhc.config: debug
+    com:
+      company:
+        cache: debug
+  pattern:
+    console: '%p%m%n'
+
+# 配置 mappers 文件
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+      id-type: id_worker
+  mapper-locations: classpath:/mapper/*.xml
+
+jwt:
+  tokenHeader: Authorization #JWT存储的请求头
+  secret: mall-admin-secret #JWT加解密使用的密钥
+  expiration: 86400 #JWT的超期限时间(60*60*24)
+  tokenHead: Tech  #JWT负载中拿到开头
+web:
+  images-ZIMG_URL: http://121.36.222.157:4869/
+  all-images: file:/usr/local/images/
+  all-images-mapping: /images/**
+  images: /usr/local/images/device-backend
+  photo: 0963a765614f9123b71bd48b4b9a2a69
+  images-mapping: images/device-backend
+  files: /image/
+  images-suffix: >
+    .JPG,
+    .JPEG,
+    .PNG,
+    .GIF,
+    .BMP

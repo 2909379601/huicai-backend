@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jhc.huicai.mapper.BasTeacherMapper">
+    <select id="getTeachPageData" resultType="com.jhc.huicai.VO.BasTeacherVo">
+        SELECT
+        ct.id,
+        ct.number,
+        ct.name,
+        ct.sex,
+        ct.phone,
+        bc.number AS deptNumber,
+        bc2.number AS topDeptNumber,
+        bc2.name AS topDeptName,
+        bc.name AS deptName
+        FROM
+        bas_teacher AS ct
+        left JOIN bas_college AS bc ON bc.number = ct.dept_number
+        left JoIN bas_college AS bc2 ON bc2.number= ct.top_dept_number
+        WHERE
+        ct.is_del = 0
+        <if test='dto.number != null and dto.number !="" '>
+            and ct.number = #{dto.number}
+        </if>
+        <if test='dto.name != null and dto.name !="" '>
+            and ct.NAME  like CONCAT('%',#{dto.name},'%')
+        </if>
+        <if test='dto.topDeptNumber != null and dto.topDeptNumber !="" '>
+            and ct.top_dept_number = #{dto.topDeptNumber}
+        </if>
+        <if test='dto.deptNumber != null and dto.deptNumber !="" '>
+            and ct.dept_number = #{dto.deptNumber}
+        </if>
+        ORDER BY ct.create_time
+    </select>
+</mapper>

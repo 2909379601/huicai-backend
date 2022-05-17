@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jhc.huicai.mapper.SysUserMapper">
+    <select id="getAllUserPageData" resultType="com.jhc.huicai.VO.SysUserVO">
+        select * from sys_user cu
+        WHERE cu.is_del = 0
+        <if test='dto.number != null and dto.number !="" '>
+            and cu.number = #{dto.number}
+        </if>
+        <if test='dto.name != null and dto.number !="" '>
+            and cu.`name` like concat("%", #{dto.name}, "%")
+        </if>
+    </select>
+
+    <select id="searchUserByRoleId" resultType="com.jhc.huicai.VO.SysUserSearchVO">
+        select
+        u.id,
+        u.number,
+        u.name
+        from
+        sys_user as u
+        where
+        u.is_del = 0
+        <if test="dto.name !=null">
+            and u.`name` like concat("%", #{dto.name}, "%")
+        </if>
+        <if test="dto.number !=null">
+            and u.number like concat("%", #{dto.number} , "%")
+        </if>
+        <if test="dto.isBelong !=null and dto.isBelong == true ">
+            and u.auth_data like concat("%", #{dto.roleId} , "%")
+        </if>
+        <if test="dto.isBelong !=null and dto.isBelong == false ">
+            and u.auth_data not like concat("%", #{dto.roleId} , "%")
+        </if>
+    </select>
+
+</mapper>
